@@ -63,9 +63,9 @@ namespace WebAPI.Models
         {
             string[] str = searchvalues.Split('|');
 
-            string specialty = str[0];
+            string recipe = str[0];
             string recipeparent = str[1];
-            string recipe = str[2];
+            string specialty = str[2];
 
 
             IList<receipemaster> lstreceipe = new List<receipemaster>();
@@ -135,6 +135,74 @@ namespace WebAPI.Models
             catch (Exception)
             {
 
+                throw;
+            }
+
+        }
+
+        public int SaveReceipeDetails(receipemaster[] rp)
+        {
+            // get the ID
+            int ID = 0;
+            for (int i = 0; i < rp.Length ; i++ )
+            {
+                ID = rp[i].RecipeId;
+                break;
+            }
+
+            // First Delete records then save
+            try
+            {
+                 using (SqlConnection con = new SqlConnection(connectionString))
+                    {
+                        using (SqlCommand cmd = new SqlCommand("Delete from dbo.Recipe_Master_Main_Mohanish" +
+                            " where ID =  @ID", con))
+                        {
+                            cmd.CommandType = System.Data.CommandType.Text;
+                            cmd.Parameters.AddWithValue("@ID", ID);                            
+                            con.Open();
+                            int rowsAffected = cmd.ExecuteNonQuery();
+                            con.Close();
+                        }
+                    }
+            }
+            catch (Exception)
+            {
+                
+                throw;
+            }
+            // Save 
+            try
+            {
+                foreach (receipemaster s in rp)
+                {
+                    using (SqlConnection con = new SqlConnection(connectionString))
+                    {
+                        using (SqlCommand cmd = new SqlCommand("INSERT INTO dbo.Recipe_Master_Main_Mohanish(ID,Specialty,Recipe_Parent,Recipe,Priority,PreLogicalOperator,Attribute,Condition,CodeGroup_Name,PostLogicalOperator)" +
+                            "VALUES (@ID,@Specialty, @RecipeParent, @Recipe, @Priority,@PreLogicalOperator, @Attribute, @Condition, @Codegroup, @PostLogicalOperator)", con))
+                        {
+                            cmd.CommandType = System.Data.CommandType.Text;
+                            cmd.Parameters.AddWithValue("@ID", s.RecipeId);
+                            cmd.Parameters.AddWithValue("@Specialty", s.Specialty);
+                            cmd.Parameters.AddWithValue("@RecipeParent", s.Recipe_Parent);
+                            cmd.Parameters.AddWithValue("@Recipe", s.Recipe);
+                            cmd.Parameters.AddWithValue("@Priority", Convert.ToInt32(s.Priority));
+                            cmd.Parameters.AddWithValue("@PreLogicalOperator", s.PreLogicalOperator);
+                            cmd.Parameters.AddWithValue("@Attribute", s.Attribute);
+                            cmd.Parameters.AddWithValue("@Condition", s.Condition);
+                            cmd.Parameters.AddWithValue("@Codegroup", s.Codegroup);
+                            cmd.Parameters.AddWithValue("@PostLogicalOperator", s.PostLogicalOperator);
+                            con.Open();
+                            int rowsAffected = cmd.ExecuteNonQuery();
+                            con.Close();
+                        }
+                    }                   
+                }
+
+                return 1;
+            }
+            catch (Exception)
+            {
                 throw;
             }
 

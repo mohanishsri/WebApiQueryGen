@@ -55,6 +55,13 @@ namespace WebAPI.Controllers
             return objdbcall.SaveReceipeMaster(value);
         }
 
+        [HttpPost]
+        [Route("api/recipe/Save")]
+        public int Post([FromBody]receipemaster[] value)
+        {
+            return objdbcall.SaveReceipeDetails(value);
+        }
+
         // PUT api/recipe/5
         [HttpPut]
         [Route("api/recipe/Edit")]
