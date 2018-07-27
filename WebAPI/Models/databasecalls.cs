@@ -77,7 +77,7 @@ namespace WebAPI.Models
 
                 command.Parameters.Add(new SqlParameter("@Specialty", specialty == string.Empty ? null : specialty));
                 command.Parameters.Add(new SqlParameter("@RecipeParent", recipeparent == string.Empty ? null : recipeparent));
-                command.Parameters.Add(new SqlParameter("@Recipe", recipe == string.Empty ? null : recipe));                
+                command.Parameters.Add(new SqlParameter("@Recipe", recipe == string.Empty ? null : recipe));
                 try
                 {
                     connection.Open();
@@ -97,7 +97,7 @@ namespace WebAPI.Models
                 }
                 catch (Exception)
                 {
-                    
+
                     throw;
                 }
             }
@@ -142,7 +142,7 @@ namespace WebAPI.Models
 
         private int getIdFromTable()
         {
-            int ID_Col=0;
+            int ID_Col = 0;
 
             // Provide the query string with a parameter placeholder.
             string queryString =
@@ -194,7 +194,7 @@ namespace WebAPI.Models
                         cmd.Parameters.AddWithValue("@Specialty", rp.Specialty);
                         cmd.Parameters.AddWithValue("@RecipeParent", rp.Recipe_Parent);
                         cmd.Parameters.AddWithValue("@Recipe", rp.Recipe);
-                        
+
                         con.Open();
                         int rowsAffected = cmd.ExecuteNonQuery();
                         con.Close();
@@ -235,6 +235,110 @@ namespace WebAPI.Models
                 throw;
             }
 
+        }
+    }
+
+    public class attributedbcalls
+    {
+        string connectionString =
+         "Data Source=apsgs-ctl01,17001;Initial Catalog=DEV_SIP_STG1;"
+         + "Integrated Security=true";
+
+        public IEnumerable<string> GetTablesName()
+        {
+
+            IList<string> lsttblnames = new List<string>();
+
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                SqlCommand command = new SqlCommand("dbo.Get_TableNames", connection);
+                command.CommandType = System.Data.CommandType.StoredProcedure;
+
+                try
+                {
+                    connection.Open();
+                    SqlDataReader reader = command.ExecuteReader();
+
+                    while (reader.Read())
+                    {
+                        lsttblnames.Add(reader[0].ToString());
+                    }
+
+                    reader.Close();
+                }
+                catch (Exception)
+                {
+
+                    throw;
+                }
+            }
+            return lsttblnames;
+        }
+
+        public IEnumerable<ColName> GetColNames(string tableName, int ID)
+        {
+            IList<ColName> lstcolnames = new List<ColName>();
+
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                SqlCommand command;
+
+                if (ID == -1)
+                {
+                    command = new SqlCommand("dbo.Get_ColumnNameAsTable", connection);
+                    command.CommandType = System.Data.CommandType.StoredProcedure;
+
+                    command.Parameters.Add(new SqlParameter("@tablename", tableName == string.Empty ? "GIRFT_NCIP_RnD_BaseComponent" : tableName));
+                }
+                else
+                {
+                    command = new SqlCommand("dbo.Get_ColumnValue", connection);
+                    command.CommandType = System.Data.CommandType.StoredProcedure;
+
+                    command.Parameters.Add(new SqlParameter("@tablename", tableName == string.Empty ? "GIRFT_NCIP_RnD_BaseComponent" : tableName));
+                    command.Parameters.Add(new SqlParameter("@id", ID));
+                }
+                try
+                {
+                    connection.Open();
+                    SqlDataReader reader = command.ExecuteReader();
+
+                    if (ID == -1)
+                    {
+                        while (reader.Read())
+                        {
+                            ColName cn = new ColName();
+                            cn.ID = Convert.ToInt32(reader[0]);
+                            cn.Name = reader[1].ToString();
+                            lstcolnames.Add(cn);
+                        }
+
+                        reader.Close();
+                    }
+                    else
+                    {
+                        int i = 1;
+                        while (reader.Read())
+                        {
+                            ColName cn = new ColName();
+                            cn.ID = i;
+                            cn.Name = reader[0].ToString();
+                            lstcolnames.Add(cn);
+                            i++;
+                        }
+
+                        reader.Close();
+                    }
+                    
+                }
+                catch (Exception)
+                {
+
+                    throw;
+                }
+            }
+
+            return lstcolnames;
         }
     }
 }

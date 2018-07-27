@@ -19,9 +19,9 @@ namespace WebAPI.Models
         public string PostLogicalOperator { get; set; }
     }
 
-    public class recipecolumn
+    public class ColName
     {
-        public string colname { get; set; }
-        public string colvalue { get; set; }
+        public int ID { get; set; }
+        public string Name { get; set; }        
     }
 }
