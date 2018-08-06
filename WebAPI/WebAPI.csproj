@@ -149,6 +149,7 @@
     <Compile Include="Areas\HelpPage\SampleGeneration\SampleDirection.cs" />
     <Compile Include="Areas\HelpPage\SampleGeneration\TextSample.cs" />
     <Compile Include="Areas\HelpPage\XmlDocumentationProvider.cs" />
+    <Compile Include="Controllers\addattributeController.cs" />
     <Compile Include="Controllers\addrecipeController.cs" />
     <Compile Include="Controllers\attributeController.cs" />
     <Compile Include="Controllers\displayresultController.cs" />
@@ -159,7 +160,9 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Models\AddNewAttribute.cs" />
     <Compile Include="Models\AddRecipe.cs" />
+    <Compile Include="Models\attributecolval.cs" />
     <Compile Include="Models\databasecalls.cs" />
     <Compile Include="Models\dbAddRecipe.cs" />
     <Compile Include="Models\DBModel.Context.cs">
