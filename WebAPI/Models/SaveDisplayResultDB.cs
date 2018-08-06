@@ -35,7 +35,7 @@ namespace WebAPI.Models
                 }
             }
 
-            return lstreceipe;
+            return lstreceipe.ToArray();
         }
 
         public int SaveQuery(string query)
