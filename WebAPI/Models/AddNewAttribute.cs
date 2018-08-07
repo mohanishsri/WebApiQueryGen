@@ -64,5 +64,49 @@ namespace WebAPI.Models
             return lstreceipe;
         }
 
+        public int SaveAttributeValue(attributecolval[] value, string colname)
+        {   
+
+            string[] strcolnattr = colname.Split('|');
+
+            string selectedvalue = string.Empty;
+
+            foreach (attributecolval s in value)
+            {
+                if(selectedvalue == string.Empty)
+                {
+                    selectedvalue = s.itemName;
+                }
+                else
+                {
+                    selectedvalue = selectedvalue + ',' + s.itemName + ',';
+                }
+            }
+
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                SqlCommand command = new SqlCommand("dbo.SaveAttrbute", connection);
+                command.CommandType = System.Data.CommandType.StoredProcedure;
+
+                command.Parameters.Add(new SqlParameter("@colname", strcolnattr[0]));
+                command.Parameters.Add(new SqlParameter("@attributealias", strcolnattr[1]));
+                command.Parameters.Add(new SqlParameter("@selectedvalue", selectedvalue));
+                
+                try
+                {
+                    connection.Open();
+                    command.ExecuteNonQuery();
+                    connection.Close(); 
+                }
+                catch (Exception)
+                {
+
+                    throw;
+                }
+            } 
+           
+            return 1;
+        }
+
     }
 }

@@ -34,11 +34,21 @@ namespace WebAPI.Controllers
             return "value";
         }
 
-        // POST api/addattribute
-        public void Post([FromBody]string value)
+        // POST api/recipe
+        [HttpPost]
+        [Route("api/addattribute/Create")]
+        public int Post([FromBody]attributecolval value)
         {
+            return 1;
         }
 
+        [HttpPost]
+        [Route("api/addattribute/Save")]
+        public int Post([FromBody]attributecolval[] value, [FromUri()]string colname)
+        {
+            return db.SaveAttributeValue(value, colname);
+        }
+       
         // PUT api/addattribute/5
         public void Put(int id, [FromBody]string value)
         {
