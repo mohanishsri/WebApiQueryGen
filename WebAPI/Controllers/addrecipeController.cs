@@ -17,9 +17,9 @@ namespace WebAPI.Controllers
         // GET api/recipe
         [HttpGet]
         [Route("api/addrecipe/Index")]
-        public IEnumerable<AddRecipe> Get()
+         public IEnumerable<attributecolval> Get()
         {
-            return objdbcall.GetReceipeDetails();
+            return objdbcall.GetColNamesForRecipe();
         }
 
         // GET api/addrecipe/5
