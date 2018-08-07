@@ -17,15 +17,17 @@ namespace WebAPI.Controllers
         // GET api/recipe
         [HttpGet]
         [Route("api/addrecipe/Index")]
-         public IEnumerable<attributecolval> Get()
+        public IEnumerable<attributecolval> Get()
         {
             return objdbcall.GetColNamesForRecipe();
         }
 
         // GET api/addrecipe/5
-        public string Get(int id)
+        [HttpGet]
+        [Route("api/addrecipe/Index")]
+        public IEnumerable<string> Get(string colname)
         {
-            return "value";
+            return objdbcall.GetColValuesForRecipe(colname); ;
         }
       
         [HttpPost]

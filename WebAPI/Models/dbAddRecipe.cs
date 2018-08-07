@@ -37,6 +37,38 @@ namespace WebAPI.Models
             return lstreceipe;
         }
 
+        public IEnumerable<string> GetColValuesForRecipe(string colname)
+        {
+            IList<string> lstreceipe = new List<string>();           
+
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                SqlCommand command = new SqlCommand("dbo.Get_ColumnValue", connection);
+                command.CommandType = System.Data.CommandType.StoredProcedure;
+
+                command.Parameters.Add(new SqlParameter("@colname", colname));
+
+                try
+                {
+                    connection.Open();
+                    SqlDataReader reader = command.ExecuteReader();
+
+                    while (reader.Read())
+                    {
+                        lstreceipe.Add(reader[0].ToString());
+                    }
+
+                    reader.Close();
+                }
+                catch (Exception)
+                {
+
+                    throw;
+                }
+            }
+            return lstreceipe;           
+        }
+
         public IEnumerable<AddRecipe> GetReceipeDetails()
         {
             IList<AddRecipe> lstreceipe = new List<AddRecipe>();
