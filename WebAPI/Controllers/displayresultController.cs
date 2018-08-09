@@ -17,18 +17,18 @@ namespace WebAPI.Controllers
          // GET api/recipe
         [HttpGet]
         [Route("api/displayrecipe/Index")]
-        public IEnumerable<Displaydata> Get()
+        public IEnumerable<Displaydata> Get(int Id)
         {
-            return db.GetDisplayResult();
+            return db.GetDisplayResult(Id);
                   
         }        
 
         // POST api/displayresult
         [HttpPost]
-        [Route("api/displayrecipe/Create")] 
-        public int Post([FromBody]string query)
+        [Route("api/displayrecipe/Create")]
+        public int Post([FromBody]string query, [FromUri()]int Id)
         {
-            return db.SaveQuery(query);
+            return db.SaveQuery(query, Id);
         }
 
         // PUT api/displayresult/5
