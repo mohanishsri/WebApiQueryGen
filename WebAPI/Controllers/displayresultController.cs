@@ -19,6 +19,8 @@ namespace WebAPI.Controllers
         [Route("api/displayrecipe/Index")]
         public IEnumerable<Displaydata> Get(int Id)
         {
+            //throw new HttpResponseException(HttpStatusCode.Continue);
+             
             return db.GetDisplayResult(Id);
                   
         }        

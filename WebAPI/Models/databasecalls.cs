@@ -18,7 +18,7 @@ namespace WebAPI.Models
 
             // Provide the query string with a parameter placeholder.
             string queryString =
-                "SELECT ID as RecipeId, Specialty,Recipe_Parent, Recipe from dbo.Recipe_Master_Mohanish order by RecipeId";
+                "SELECT ID as RecipeId, Specialty,Recipe_Parent, Recipe, Priority from dbo.Recipe_Master_Mohanish order by RecipeId";
 
             // Create and open the connection in a using block. This
             // ensures that all resources will be closed and disposed
@@ -44,6 +44,7 @@ namespace WebAPI.Models
                         rp.Specialty = reader[1].ToString();
                         rp.Recipe_Parent = reader[2].ToString();
                         rp.Recipe = reader[3].ToString();
+                        rp.Priority = reader[4].ToString();
                         lstreceipe.Add(rp);
                     }
 
@@ -66,6 +67,7 @@ namespace WebAPI.Models
             string recipe = str[0];
             string recipeparent = str[1];
             string specialty = str[2];
+            string priority = str[3];
 
 
             IList<receipemaster> lstreceipe = new List<receipemaster>();
@@ -78,6 +80,7 @@ namespace WebAPI.Models
                 command.Parameters.Add(new SqlParameter("@Specialty", specialty == string.Empty ? null : specialty));
                 command.Parameters.Add(new SqlParameter("@RecipeParent", recipeparent == string.Empty ? null : recipeparent));
                 command.Parameters.Add(new SqlParameter("@Recipe", recipe == string.Empty ? null : recipe));
+                command.Parameters.Add(new SqlParameter("@Priority", priority == string.Empty ? null : priority));
                 try
                 {
                     connection.Open();
@@ -90,6 +93,7 @@ namespace WebAPI.Models
                         rp.Specialty = reader[1].ToString();
                         rp.Recipe_Parent = reader[2].ToString();
                         rp.Recipe = reader[3].ToString();
+                        rp.Priority = reader[4].ToString();
                         lstreceipe.Add(rp);
                     }
 
@@ -118,7 +122,7 @@ namespace WebAPI.Models
                         cmd.Parameters.AddWithValue("@Specialty", rp.Specialty);
                         cmd.Parameters.AddWithValue("@RecipeParent", rp.Recipe_Parent);
                         cmd.Parameters.AddWithValue("@Recipe", rp.Recipe);
-                        cmd.Parameters.AddWithValue("@Priority", 0);
+                        cmd.Parameters.AddWithValue("@Priority", rp.Priority);
                         cmd.Parameters.AddWithValue("@PreLogicalOperator", null);
                         cmd.Parameters.AddWithValue("@Attribute", null);
                         cmd.Parameters.AddWithValue("@Condition", null);
@@ -255,13 +259,14 @@ namespace WebAPI.Models
             {
                 using (SqlConnection con = new SqlConnection(connectionString))
                 {
-                    using (SqlCommand cmd = new SqlCommand("UPDATE dbo.Recipe_Master_Mohanish SET Specialty= @Specialty, Recipe_Parent = @RecipeParent, Recipe = @Recipe WHERE ID = @RecipeId", con))
+                    using (SqlCommand cmd = new SqlCommand("UPDATE dbo.Recipe_Master_Mohanish SET Specialty= @Specialty, Recipe_Parent = @RecipeParent, Recipe = @Recipe, Priority= @Priority WHERE ID = @RecipeId", con))
                     {
                         cmd.CommandType = System.Data.CommandType.Text;
                         cmd.Parameters.AddWithValue("@RecipeId", rp.RecipeId);
                         cmd.Parameters.AddWithValue("@Specialty", rp.Specialty);
                         cmd.Parameters.AddWithValue("@RecipeParent", rp.Recipe_Parent);
                         cmd.Parameters.AddWithValue("@Recipe", rp.Recipe);
+                        cmd.Parameters.AddWithValue("@Priority", rp.Priority);
 
                         con.Open();
                         int rowsAffected = cmd.ExecuteNonQuery();
